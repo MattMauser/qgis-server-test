@@ -64,6 +64,8 @@ services:
       - "8080:8080"
     volumes:
       - ./mapproxy:/mapproxy
+    networks:
+      - qgis-server-net
     depends_on:
       - qgis-server
 
