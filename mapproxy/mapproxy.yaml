@@ -50,7 +50,7 @@ sources:
   ott_wms:
     type: wms
     req:
-      url: http://127.0.0.1:8010/ogc/OttawaArea?
+      url: http://nginx/ogc/OttawaArea?
       layers: Boundaries,NaturalAreas,Water
 
 grids:
