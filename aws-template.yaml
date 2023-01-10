@@ -1,0 +1,84 @@
+name: qgis_server_test
+services:
+  mapproxy:
+    depends_on:
+      qgis-server:
+        condition: service_started
+    image: kartoza/mapproxy
+    networks:
+      qgis-server-net: null
+    ports:
+    - mode: ingress
+      target: 8080
+      published: "8080"
+      protocol: tcp
+    volumes:
+    - type: bind
+      source: C:\Users\mattm\Documents\qgis_server_test\mapproxy
+      target: /mapproxy
+      bind:
+        create_host_path: true
+  nginx:
+    depends_on:
+      mapproxy:
+        condition: service_started
+      qgis-server:
+        condition: service_started
+    image: nginx
+    networks:
+      qgis-server-net: null
+    ports:
+    - mode: ingress
+      host_ip: 127.0.0.1
+      target: 80
+      published: "8010"
+      protocol: tcp
+    restart: unless-stopped
+    volumes:
+    - type: bind
+      source: C:\Users\mattm\Documents\qgis_server_test\conf\nginx.conf
+      target: /etc/nginx/nginx.conf
+      bind:
+        create_host_path: true
+  qgis-server:
+    environment:
+      QGIS_SERVER_LOG_LEVEL: "0"
+      QGIS_SERVER_MAX_THREADS: "4"
+      QGIS_SERVER_PARALLEL_RENDERING: "true"
+      QGIS_SERVER_WMS_MAX_HEIGHT: "5000"
+      QGIS_SERVER_WMS_MAX_WIDTH: "5000"
+      SKIP_NGINX: "true"
+    image: openquake/qgis-server:stable
+    networks:
+      qgis-server-net: null
+    ports:
+    - mode: ingress
+      target: 9993
+      published: "9993"
+      protocol: tcp
+    restart: unless-stopped
+    volumes:
+    - type: bind
+      source: C:\Users\mattm\Documents\qgis_server_test\data
+      target: /io/data
+      read_only: true
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\mattm\Documents\qgis_server_test\plugins
+      target: /io/plugins
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\mattm\Documents\qgis_server_test\fonts
+      target: /usr/share/fonts
+      bind:
+        create_host_path: true
+    - type: bind
+      source: C:\Users\mattm\Documents\qgis_server_test\svg
+      target: /var/lib/qgis/.local/share/QGIS/QGIS3/profiles/default/svg
+      bind:
+        create_host_path: true
+networks:
+  qgis-server-net:
+    name: qgis_server_test_qgis-server-net
