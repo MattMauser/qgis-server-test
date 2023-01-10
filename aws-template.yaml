@@ -14,7 +14,7 @@ services:
       protocol: tcp
     volumes:
     - type: bind
-      source: C:\Users\mattm\Documents\qgis_server_test\mapproxy
+      source: ./mapproxy
       target: /mapproxy
       bind:
         create_host_path: true
@@ -36,7 +36,7 @@ services:
     restart: unless-stopped
     volumes:
     - type: bind
-      source: C:\Users\mattm\Documents\qgis_server_test\conf\nginx.conf
+      source: ./conf/nginx.conf
       target: /etc/nginx/nginx.conf
       bind:
         create_host_path: true
@@ -59,23 +59,23 @@ services:
     restart: unless-stopped
     volumes:
     - type: bind
-      source: C:\Users\mattm\Documents\qgis_server_test\data
+      source: ./data
       target: /io/data
       read_only: true
       bind:
         create_host_path: true
     - type: bind
-      source: C:\Users\mattm\Documents\qgis_server_test\plugins
+      source: ./plugins
       target: /io/plugins
       bind:
         create_host_path: true
     - type: bind
-      source: C:\Users\mattm\Documents\qgis_server_test\fonts
+      source: ./fonts
       target: /usr/share/fonts
       bind:
         create_host_path: true
     - type: bind
-      source: C:\Users\mattm\Documents\qgis_server_test\svg
+      source: ./svg
       target: /var/lib/qgis/.local/share/QGIS/QGIS3/profiles/default/svg
       bind:
         create_host_path: true
